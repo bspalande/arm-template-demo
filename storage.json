@@ -1,33 +1,19 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "vnetName": {
+    "webAppName": {
       "type": "string",
-      "defaultValue": "VNet1",
       "metadata": {
-        "description": "VNet name"
-      }
+        "description": "Base name of the resource such as web app name and app service plan "
+      },
+      "minLength": 2
     },
-    "vnetAddressPrefix": {
+    "sku":{
       "type": "string",
-      "defaultValue": "10.0.0.0/16",
+      "defaultValue" : "S1",
       "metadata": {
-        "description": "Address prefix"
-      }
-    },
-    "subnetPrefix": {
-      "type": "string",
-      "defaultValue": "10.0.0.0/24",
-      "metadata": {
-        "description": "Subnet Prefix"
-      }
-    },
-    "subnetName": {
-      "type": "string",
-      "defaultValue": "Subnet1",
-      "metadata": {
-        "description": "Subnet Name"
+        "description": "The SKU of App Service Plan, by defaut is standard S1"
       }
     },
     "location": {
@@ -38,27 +24,35 @@
       }
     }
   },
+  "variables": {
+    "webAppPortalName": "[concat(parameters('webAppName'), '-webapp')]",
+    "appServicePlanName": "[concat('AppServicePlan-', parameters('webAppName'))]"
+  },
   "resources": [
     {
-      "type": "Microsoft.Network/virtualNetworks",
-      "apiVersion": "2021-08-01",
-      "name": "[parameters('vnetName')]",
+      "apiVersion": "2017-08-01",
+      "type": "Microsoft.Web/serverfarms",
+      "kind": "app",
+      "name": "[variables('appServicePlanName')]",
+      "location": "[parameters('location')]",
+      "properties": {},
+      "dependsOn": [],
+      "sku": {
+        "name": "[parameters('sku')]"
+      }
+    },
+    {
+      "apiVersion": "2016-08-01",
+      "type": "Microsoft.Web/sites",
+      "kind": "app",
+      "name": "[variables('webAppPortalName')]",
       "location": "[parameters('location')]",
       "properties": {
-        "addressSpace": {
-          "addressPrefixes": [
-            "[parameters('vnetAddressPrefix')]"
-          ]
-        },
-        "subnets": [
-          {
-            "name": "[parameters('subnetName')]",
-            "properties": {
-              "addressPrefix": "[parameters('subnetPrefix')]"
-            }
-          }
-        ]
-      }
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+      ]
     }
   ]
 }
