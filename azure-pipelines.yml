@@ -8,12 +8,13 @@ trigger:
 
 pool:
   vmImage: ubuntu-latest
-
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+- task: CopyFiles@2
+  displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
+  inputs:
+    Contents: 'azuredeploy*.json'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+steps:
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
