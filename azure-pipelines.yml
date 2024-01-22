@@ -14,7 +14,6 @@ steps:
   inputs:
     Contents: 'azuredeploy*.json'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
-steps:
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
 
