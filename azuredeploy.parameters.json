@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "stoageAccountName": {
-            "value": "mystorage11" // TODO: Fill in parameter value
+            "value": "mystorage11" // TODO: Fill in parameter value for storage name
         }
     }
 }
