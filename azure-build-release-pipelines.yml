@@ -10,7 +10,7 @@ stages:
   - stage: Build
     displayName: 'Deploy To Dev'
     jobs:
-      - job: Copy and Publish Artifact
+      - job: CopyPublishArtifact
         variables:
           buildConfiguration: 'Release'
 
@@ -26,7 +26,7 @@ stages:
         - task: PublishBuildArtifacts@1
           displayName: 'Publish Artifact: drop'
 
-  - stage: DeployProd
+  - stage: DeployDev
     displayName: 'Deploy To Dev'
     variables: 
          - group: 'YAML-Releases-Dev'
@@ -59,7 +59,7 @@ stages:
                   subscriptionId: '1b7cc8eb-f3b7-475c-8989-310f3375239d'
                   resourceGroupName: 'arm-template-group'
                   location: 'Central US'
-                  csmFile: '$(System.DefaultWorkingDirectory)/_arm-template-poc-CI/drop/azuredeploy.json'
-                  csmParametersFile: '$(System.DefaultWorkingDirectory)/_arm-template-poc-CI/drop/azuredeploy.parameters.json'
+                  csmFile: '$(System.DefaultWorkingDirectory)/_arm-template-demo/drop/azuredeploy.json'
+                  csmParametersFile: '$(System.DefaultWorkingDirectory)/_arm-template-demo/drop/azuredeploy.parameters.json'
 
   
